@@ -87,7 +87,7 @@ void Game::handleEvents() {
                     moveHoldTimer = -dasDelay;
                     break;
                 case sf::Keyboard::Scancode::S:
-                    if (current.move({0, 1}, grid)) score += 1;
+                    current.move({0, 1}, grid);
                     moveHoldKey = key;
                     moveHoldTimer = -dasDelay;
                     break;
