@@ -18,7 +18,7 @@ private:
     Tetromino current;
     std::deque<Tetromino> upcoming;
 
-    int previewCount = 1;
+    int previewCount = 5;
     int score = 0;
     bool gameOver = false;
     bool paused = false;

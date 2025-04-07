@@ -38,6 +38,7 @@ Game::Game()
 
     sf::VideoMode mode({COLS * BLOCK_SIZE + 150, ROWS * BLOCK_SIZE});
     window.create(mode, "Tetris");
+    window.setVerticalSyncEnabled(true);
 }
 
 void Game::run() {
