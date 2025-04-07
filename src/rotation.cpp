@@ -63,15 +63,15 @@ void applyRotation(Tetromino& piece, const Grid& grid) {
     int from = piece.rotation;
     int to = (from + 1) % 4;
 
-    Point center = piece.blocks[1]; // 中心旋转点
+    Point center = piece.blocks[1];
     std::vector<Point> rotated;
     for (const auto& b : piece.blocks) {
         int dx = b.x - center.x;
         int dy = b.y - center.y;
-        rotated.push_back({ -dy + center.x, dx + center.y }); // 顺时针
+        rotated.push_back({ -dy + center.x, dx + center.y });
     }
 
-    if (piece.type == 0) return; // O 不旋转
+    if (piece.type == 0) return;
 
     const KickTable* kickTable = (piece.type == 1) ? &I_KICK_TABLE : &JLSTZ_KICK_TABLE;
     const auto& kicks = (*kickTable)[from][to];
@@ -95,6 +95,4 @@ void applyRotation(Tetromino& piece, const Grid& grid) {
             return;
         }
     }
-
-    // 所有 kick 都失败，则不旋转
 }

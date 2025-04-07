@@ -23,27 +23,27 @@ private:
     bool gameOver = false;
     bool paused = false;
 
-    // DAS（Delayed Auto Shift）相关
+    // DAS
     sf::Keyboard::Scancode moveHoldKey = sf::Keyboard::Scancode::Unknown;
     float moveHoldTimer = 0.f;
     const float dasDelay = 0.2f;
     const float dasRepeat = 0.05f;
 
-    // 字体与文本
+    // font and text
     sf::Font font;
     sf::Text scoreText;
     sf::Text gameOverText;
     sf::Text pausedText;
 
-    // 事件处理
+    // handle events
     void handleEvents();
     void handleDAS(float dt);
 
-    // 游戏核心逻辑
+    // game logic
     void lockAndNext();
     int clearLines();
 
-    // 渲染逻辑
+    // render
     void draw();
     void drawFixedBlocks();
     void drawBlock(int x, int y, sf::Color color, Point offset = {0, 0});
@@ -54,6 +54,6 @@ private:
     void drawPreviews();
     void drawScore();
 
-    // 工具函数
+    // tools
     sf::Color getColor(int type);
 };
