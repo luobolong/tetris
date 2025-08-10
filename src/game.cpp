@@ -29,7 +29,6 @@ Game::Game()
         std::exit(1);
     }
 
-    scoreText = sf::Text(font, "", 20);
     scoreText.setPosition({10.f, 10.f});
 
     gameOverText.setFillColor(sf::Color::Red);
@@ -85,6 +84,35 @@ void Game::run() {
     }
 }
 
+void Game::handleKeyPress(sf::Keyboard::Scancode key) {
+    switch (key) {
+        case sf::Keyboard::Scancode::A:
+            current.move({-1, 0}, grid);
+            moveHoldKey = key;
+            moveHoldTimer = -dasDelay;
+            break;
+        case sf::Keyboard::Scancode::D:
+            current.move({1, 0}, grid);
+            moveHoldKey = key;
+            moveHoldTimer = -dasDelay;
+            break;
+        case sf::Keyboard::Scancode::S:
+            current.move({0, 1}, grid);
+            moveHoldKey = key;
+            moveHoldTimer = -dasDelay;
+            break;
+        case sf::Keyboard::Scancode::W:
+            current.rotate(grid);
+            break;
+        case sf::Keyboard::Scancode::Space:
+            while (current.move({0, 1}, grid)) {}
+            lockAndNext();
+            break;
+        default:
+            break;
+    }
+}
+
 void Game::handleEvents() {
     while (const std::optional event = window.pollEvent()) {
         if (event->is<sf::Event::Closed>()) {
@@ -104,12 +132,10 @@ void Game::handleEvents() {
                 paused = !paused;
                 continue;
             }
-
             if (key == sf::Keyboard::Scancode::Escape) {
                 window.close();
                 continue;
             }
-
             if (key == sf::Keyboard::Scancode::R) {
                 restartGame();
                 continue;
@@ -117,33 +143,7 @@ void Game::handleEvents() {
 
             if (paused || gameOver) continue;
 
-            switch (key) {
-            case sf::Keyboard::Scancode::A:
-                current.move({ -1, 0 }, grid);
-                moveHoldKey = key;
-                moveHoldTimer = -dasDelay;
-                break;
-            case sf::Keyboard::Scancode::D:
-                current.move({ 1, 0 }, grid);
-                moveHoldKey = key;
-                moveHoldTimer = -dasDelay;
-                break;
-            case sf::Keyboard::Scancode::S:
-                current.move({ 0, 1 }, grid);
-                moveHoldKey = key;
-                moveHoldTimer = -dasDelay;
-                break;
-            case sf::Keyboard::Scancode::W:
-                current.rotate(grid);
-                break;
-            case sf::Keyboard::Scancode::Space:
-                while (current.move({ 0, 1 }, grid)) {}
-                lockAndNext();
-                break;
-            default:
-                break;
-            }
-            continue;
+            handleKeyPress(key);
         }
 
         if (const auto* keyReleased = event->getIf<sf::Event::KeyReleased>()) {
@@ -355,13 +355,17 @@ sf::FloatRect Game::computeViewport(unsigned winW, unsigned winH, float worldW, 
 void Game::onResized(sf::Vector2u size) {
     const unsigned w = size.x, h = size.y;
 
-    viewportNormalized = computeViewport(
-        w, h, static_cast<float>(LOGICAL_W), static_cast<float>(LOGICAL_H)
-    );
-    gameView.setViewport(viewportNormalized);
-    window.setView(gameView);
-    updateViewportPixels(w, h);
-    updateUIFromViewport();
+    static sf::Vector2u prevSize = {0, 0};
+    if (prevSize != size) {
+        viewportNormalized = computeViewport(
+            w, h, static_cast<float>(LOGICAL_W), static_cast<float>(LOGICAL_H)
+        );
+        gameView.setViewport(viewportNormalized);
+        window.setView(gameView);
+        updateViewportPixels(w, h);
+        updateUIFromViewport();
+        prevSize = size;
+    }
 }
 
 void Game::updateUIFromViewport() {

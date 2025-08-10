@@ -48,6 +48,7 @@ private:
     void updateUIFromViewport();
 
     // handle events
+    void handleKeyPress(sf::Keyboard::Scancode key);
     void handleEvents();
     void handleDAS(float dt);
 
