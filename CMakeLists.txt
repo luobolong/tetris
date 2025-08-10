@@ -18,9 +18,6 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(tetris ${SOURCES})
-add_custom_command(TARGET tetris POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-            ${CMAKE_SOURCE_DIR}/res $<TARGET_FILE_DIR:tetris>/res)
 
 target_compile_features(tetris PRIVATE cxx_std_20)
 target_link_libraries(tetris PRIVATE SFML::Graphics)

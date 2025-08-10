@@ -34,6 +34,18 @@ private:
     sf::Text scoreText;
     sf::Text gameOverText;
     sf::Text pausedText;
+    sf::Text helpText;
+
+    // view
+    sf::View gameView;
+    sf::FloatRect viewportNormalized;
+    sf::FloatRect viewportPixels;
+
+    // viewport
+    void updateViewportPixels(unsigned winW, unsigned winH);
+    sf::FloatRect computeViewport(unsigned winW, unsigned winH, float worldW, float worldH);
+    void onResized(sf::Vector2u size);
+    void updateUIFromViewport();
 
     // handle events
     void handleEvents();
@@ -56,4 +68,6 @@ private:
 
     // tools
     sf::Color getColor(int type);
+
+    void restartGame();
 };
